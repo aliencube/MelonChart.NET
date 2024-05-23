@@ -2,7 +2,7 @@
 
 public class ArgumentOptions
 {
-    public ChartType ChartType { get; set; } = ChartType.Top100;
+    public ChartTypes ChartType { get; set; } = ChartTypes.Top100;
     public bool Help { get; set; } = false;
 
     public static ArgumentOptions Parse(string[] args)
@@ -24,7 +24,7 @@ public class ArgumentOptions
                 case "--type":
                 case "--chart-type":
                     options.ChartType = i < args.Length - 1
-                        ? Enum.TryParse<ChartType>(args[++i], ignoreCase: true, out var result)
+                        ? Enum.TryParse<ChartTypes>(args[++i], ignoreCase: true, out var result)
                             ? result
                             : throw new ArgumentException("Invalid chart type. It should be 'Top100', 'Hot100', 'Daily100', 'Weekly100' or 'Monthly100'.")
                         : throw new ArgumentException("Invalid chart type. It should be 'Top100', 'Hot100', 'Daily100', 'Weekly100' or 'Monthly100'.");

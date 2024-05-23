@@ -5,7 +5,7 @@ using MelonChart.Extensions;
 namespace MelonChart.Tests.Extensions;
 
 [TestClass]
-public class StringExtensionsTests
+public class LocatorExtensionsTests
 {
     [DataTestMethod]
     [DataRow("2024-02-15", "2024-02-15")]
