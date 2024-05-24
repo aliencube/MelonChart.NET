@@ -1,22 +1,38 @@
 ﻿using MelonChart.Abstractions;
+using MelonChart.Extensions;
 using MelonChart.Models;
 
 using Microsoft.Playwright;
 
 namespace MelonChart;
 
-public class Monthly100Chart : IChart
+public class Monthly100Chart : Chart
 {
-    public ChartTypes ChartType => ChartTypes.Monthly100;
+    /// <inheritdoc />
+    public override ChartTypes ChartType => ChartTypes.Monthly100;
 
-    public async Task<ChartItemCollection> GetChartAsync()
+    /// <inheritdoc />
+    protected override async Task SetPageAsync()
     {
-        using var playwright = await Playwright.CreateAsync().ConfigureAwait(false);
-        await using var browser = await playwright.Chromium.LaunchAsync().ConfigureAwait(false);
-        var page = await browser.NewPageAsync().ConfigureAwait(false);
-        await page.GotoAsync(ChartPages.Hot100).ConfigureAwait(false);
-        var html = await page.ContentAsync().ConfigureAwait(false);
+        if (this.Page == null)
+        {
+            throw new InvalidOperationException("Page is not set.");
+        }
 
-        throw new NotImplementedException();
+        await this.Page.GotoAsync(ChartPages.Monthly100).ConfigureAwait(false);
+    }
+
+    /// <inheritdoc />
+    protected override async Task SetDateTimeAsync()
+    {
+        if (this.Page == null)
+        {
+            throw new InvalidOperationException("Page is not set.");
+        }
+
+        var period = await this.Page.GetTextOfElementAsync("span[class='yyyymmdd']").ConfigureAwait(false);
+        var segments = period?.Split(".");
+        this.Collection.Year = segments?.First().Trim();
+        this.Collection.Month = segments?.Last().Trim();
     }
 }

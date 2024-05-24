@@ -1,22 +1,32 @@
-﻿using MelonChart.Abstractions;
-using MelonChart.Models;
-
-using Microsoft.Playwright;
+﻿using MelonChart.Extensions;
 
 namespace MelonChart;
 
-public class Hot100Chart : IChart
+public class Hot100Chart : Chart
 {
-    public ChartTypes ChartType => ChartTypes.Hot100;
+    /// <inheritdoc />
+    public override ChartTypes ChartType => ChartTypes.Hot100;
 
-    public async Task<ChartItemCollection> GetChartAsync()
+    /// <inheritdoc />
+    protected override async Task SetPageAsync()
     {
-        using var playwright = await Playwright.CreateAsync().ConfigureAwait(false);
-        await using var browser = await playwright.Chromium.LaunchAsync().ConfigureAwait(false);
-        var page = await browser.NewPageAsync().ConfigureAwait(false);
-        await page.GotoAsync(ChartPages.Hot100).ConfigureAwait(false);
-        var html = await page.ContentAsync().ConfigureAwait(false);
+        if (this.Page == null)
+        {
+            throw new InvalidOperationException("Page is not set.");
+        }
 
-        throw new NotImplementedException();
+        await this.Page.GotoAsync(ChartPages.Hot100).ConfigureAwait(false);
+    }
+
+    /// <inheritdoc />
+    protected override async Task SetDateTimeAsync()
+    {
+        if (this.Page == null)
+        {
+            throw new InvalidOperationException("Page is not set.");
+        }
+
+        this.Collection.DateLastUpdated = await this.Page.GetTextOfElementAsync("span[class='year']").ToDateOnly().ConfigureAwait(false);
+        this.Collection.TimeLastUpdated = await this.Page.GetTextOfElementAsync("span[class='hour']").ToTimeOnly().ConfigureAwait(false);
     }
 }

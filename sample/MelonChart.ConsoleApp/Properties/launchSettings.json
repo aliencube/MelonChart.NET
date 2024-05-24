@@ -1,0 +1,24 @@
+{
+  "profiles": {
+    "Hot100": {
+      "commandName": "Project",
+      "commandLineArgs": "-c Hot100"
+    },
+    "Top100": {
+      "commandName": "Project",
+      "commandLineArgs": "-c Top100"
+    },
+    "Daily100": {
+      "commandName": "Project",
+      "commandLineArgs": "-c Daily100"
+    },
+    "Weekly100": {
+      "commandName": "Project",
+      "commandLineArgs": "-c Weekly100"
+    },
+    "Monthly100": {
+      "commandName": "Project",
+      "commandLineArgs": "-c Monthly100"
+    }
+  }
+}

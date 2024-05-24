@@ -11,6 +11,9 @@ var host = Host.CreateDefaultBuilder(args)
                {
                    services.AddTransient<IChart, Top100Chart>();
                    services.AddTransient<IChart, Hot100Chart>();
+                   services.AddTransient<IChart, Daily100Chart>();
+                   services.AddTransient<IChart, Weekly100Chart>();
+                   services.AddTransient<IChart, Monthly100Chart>();
                    services.AddTransient<IMelonChartService, MelonChartService>();
                })
                .Build();

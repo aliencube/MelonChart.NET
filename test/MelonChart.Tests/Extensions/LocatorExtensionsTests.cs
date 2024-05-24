@@ -2,54 +2,138 @@ using FluentAssertions;
 
 using MelonChart.Extensions;
 
+using Microsoft.Playwright;
+using Microsoft.Playwright.MSTest;
+
 namespace MelonChart.Tests.Extensions;
 
 [TestClass]
-public class LocatorExtensionsTests
+public class LocatorExtensionsTests : PageTest
 {
-    [DataTestMethod]
-    [DataRow("2024-02-15", "2024-02-15")]
-    [DataRow("02-15-2024", "2024-02-15")]
-    [DataRow("2-15-2024", "2024-02-15")]
-    [DataRow("2024.5.01", "2024-05-01")]
-    [DataRow("5.01.2024", "2024-05-01")]
-    [DataRow("2024/3/4", "2024-03-04")]
-    [DataRow("05/31/2024", "2024-05-31")]
-    [DataRow("5/31/2024", "2024-05-31")]
-    [DataRow("6/5/2024", "2024-06-05")]
-    public void Given_DateValue_When_Invoked_ToDateOnly_Then_It_Should_Return_Result(string value, string expected)
+    private ILocator? _locator { get; set; }
+
+    [TestInitialize]
+    public async Task TestInitialize()
     {
-        var result = value.ToDateOnly();
+        var html = await File.ReadAllTextAsync("./playwright.dev.dotnet.html");
+        this.Page.SetDefaultTimeout(1000);
+        await this.Page.SetContentAsync(html);
+
+        this._locator = this.Page.Locator("body");
+    }
+
+    [TestMethod]
+    public async Task Given_Null_When_Invoked_GetAttributeOfElementAsync_Then_It_Should_Throw_Exception()
+    {
+        var locator = default(ILocator);
+
+        Func<Task> func = async () => await locator.GetAttributeOfElementAsync("aaa", "bbb");
+
+        await func.Should().ThrowAsync<ArgumentNullException>();
+    }
+
+    [DataTestMethod]
+    [DataRow("false", "aria-expanded", "div[class='navbar__inner']", "div[class='navbar__items']", "button")]
+    [DataRow(null, "aria-extended", "div[class='navbar__inner']", "div[class='navbar__items']", "button")]
+    public async Task Given_Attribute_And_Selectors_When_Invoked_GetAttributeOfElementAsync_Then_It_Should_Return_Result(string expected, string attribute, params string[] selectors)
+    {
+        var result = await this._locator.GetAttributeOfElementAsync(attribute, selectors);
 
         result.Should().Be(expected);
     }
 
     [DataTestMethod]
-    [DataRow("31/05/2024")]
-    public void Given_DateValue_When_Invoked_ToDateOnly_Then_It_Should_Return_NULL(string value)
+    [DataRow("aria-expanded", "div[class='navbar__inner']", "div[class='navbar__items']", "article")]
+    public async Task Given_Attribute_And_NonExisting_Selectors_When_Invoked_GetAttributeOfElementAsync_Then_It_Should_Throw_Exception(string attribute, params string[] selectors)
     {
-        var result = value.ToDateOnly();
+        Func<Task> func = async () => await this._locator.GetAttributeOfElementAsync(attribute, selectors);
 
-        result.Should().BeNull();
+        await func.Should().ThrowAsync<TimeoutException>();
+    }
+
+    [TestMethod]
+    public async Task Given_Null_When_Invoked_GetAttributeOfNthElementAsync_Then_It_Should_Throw_Exception()
+    {
+        var locator = default(ILocator);
+
+        Func<Task> func = async () => await locator.GetAttributeOfNthElementAsync("aaa", 0, "bbb");
+
+        await func.Should().ThrowAsync<ArgumentNullException>();
     }
 
     [DataTestMethod]
-    [DataRow("2:15", "02:15:00")]
-    public void Given_TimeValue_When_Invoked_ToDateOnly_Then_It_Should_Return_Result(string value, string expected)
+    [DataRow("/dotnet/", "href", 0, "div[class='navbar__inner']", "div[class='navbar__items']", "a")]
+    [DataRow(null, "title", 0, "div[class='navbar__inner']", "div[class='navbar__items']", "button")]
+    public async Task Given_Attribute_And_Index_And_Selectors_When_Invoked_GetAttributeOfElementAsync_Then_It_Should_Return_Result(string expected, string attribute, int index, params string[] selectors)
     {
-        var result = value.ToTimeOnly();
+        var result = await this._locator.GetAttributeOfNthElementAsync(attribute, index, selectors);
 
         result.Should().Be(expected);
     }
 
     [DataTestMethod]
-    [DataRow("3.15")]
-    [DataRow("3-30")]
-    [DataRow("03,45")]
-    public void Given_TimeValue_When_Invoked_ToDateOnly_Then_It_Should_Return_NULL(string value)
+    [DataRow("aria-expanded", 0, "div[class='navbar__inner']", "div[class='navbar__items']", "article")]
+    public async Task Given_Attribute_And_Index_And_NonExisting_Selectors_When_Invoked_GetAttributeOfElementAsync_Then_It_Should_Throw_Exception(string attribute, int index, params string[] selectors)
     {
-        var result = value.ToTimeOnly();
+        Func<Task> func = async () => await this._locator.GetAttributeOfNthElementAsync(attribute, index, selectors);
 
-        result.Should().BeNull();
+        await func.Should().ThrowAsync<TimeoutException>();
+    }
+
+    [TestMethod]
+    public async Task Given_Null_When_Invoked_GetTextOfElementAsync_Then_It_Should_Throw_Exception()
+    {
+        var locator = default(ILocator);
+
+        Func<Task> func = async () => await locator.GetTextOfElementAsync("aaa", "bbb");
+
+        await func.Should().ThrowAsync<ArgumentNullException>();
+    }
+
+    [DataTestMethod]
+    [DataRow("Playwright for .NET", "div[class='navbar__inner']", "div[class='navbar__items']", "b")]
+    [DataRow("", "div[class='navbar__inner']", "div[class='navbar__items']", "path")]
+    public async Task Given_Attribute_And_Selectors_When_Invoked_GetTextOfElementAsync_Then_It_Should_Return_Result(string expected, params string[] selectors)
+    {
+        var result = await this._locator.GetTextOfElementAsync(selectors);
+
+        result.Should().Be(expected);
+    }
+
+    [DataTestMethod]
+    [DataRow("div[class='navbar__inner']", "div[class='navbar__items']", "article")]
+    public async Task Given_Attribute_And_NonExisting_Selectors_When_Invoked_GetTextOfElementAsync_Then_It_Should_Throw_Exception(params string[] selectors)
+    {
+        Func<Task> func = async () => await this._locator.GetTextOfElementAsync(selectors);
+
+        await func.Should().ThrowAsync<TimeoutException>();
+    }
+
+    [TestMethod]
+    public async Task Given_Null_When_Invoked_GetTextOfNthElementAsync_Then_It_Should_Throw_Exception()
+    {
+        var locator = default(ILocator);
+
+        Func<Task> func = async () => await locator.GetTextOfNthElementAsync(0, "aaa", "bbb");
+
+        await func.Should().ThrowAsync<ArgumentNullException>();
+    }
+
+    [DataTestMethod]
+    [DataRow("Docs", 0, "div[class='navbar__inner']", "div[class='navbar__items']", "a[class='navbar__item navbar__link']")]
+    public async Task Given_Attribute_And_Index_And_Selectors_When_Invoked_GetTextOfNthElementAsync_Then_It_Should_Return_Result(string expected, int index, params string[] selectors)
+    {
+        var result = await this._locator.GetTextOfNthElementAsync(index, selectors);
+
+        result.Should().Be(expected);
+    }
+
+    [DataTestMethod]
+    [DataRow(0, "div[class='navbar__inner']", "div[class='navbar__items']", "article")]
+    public async Task Given_Attribute_And_Index_And_NonExisting_Selectors_When_Invoked_GetTextOfNthElementAsync_Then_It_Should_Throw_Exception(int index, params string[] selectors)
+    {
+        Func<Task> func = async () => await this._locator.GetTextOfNthElementAsync(index, selectors);
+
+        await func.Should().ThrowAsync<TimeoutException>();
     }
 }

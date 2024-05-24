@@ -4,10 +4,15 @@ using MelonChart.Models;
 
 namespace MelonChart.ConsoleApp.Services;
 
+/// <summary>
+/// This represents the service entity for Melon chart.
+/// </summary>
+/// <param name="charts">List of <see cref="IChart"/> instances.</param>
 public class MelonChartService(IEnumerable<IChart> charts) : IMelonChartService
 {
     private readonly IEnumerable<IChart> _charts = charts ?? throw new ArgumentNullException(nameof(charts));
 
+    /// <inheritdoc />
     public async Task RunAsync(string[] args)
     {
         var options = ArgumentOptions.Parse(args);
@@ -37,8 +42,23 @@ public class MelonChartService(IEnumerable<IChart> charts) : IMelonChartService
 
     private void DisplayDetails(ChartItemCollection collection)
     {
-        Console.WriteLine($"Date Last Updated: {collection.DateLastUpdated}");
-        Console.WriteLine($"Time Last Updated: {collection.TimeLastUpdated}");
+        Console.WriteLine($"Chart Type: {collection.ChartType}");
+        if (string.IsNullOrWhiteSpace(collection.DateLastUpdated) == false)
+        {
+            Console.WriteLine($"Date: {collection.DateLastUpdated}");
+        }
+        if (string.IsNullOrWhiteSpace(collection.TimeLastUpdated) == false)
+        {
+            Console.WriteLine($"Time: {collection.TimeLastUpdated}");
+        }
+        if (string.IsNullOrWhiteSpace(collection.PeriodFrom) == false && string.IsNullOrWhiteSpace(collection.PeriodTo) == false)
+        {
+            Console.WriteLine($"Week: {collection.PeriodFrom} - {collection.PeriodTo}");
+        }
+        if (string.IsNullOrWhiteSpace(collection.Year) == false && string.IsNullOrWhiteSpace(collection.Month) == false)
+        {
+            Console.WriteLine($"Month: {collection.Year}-{collection.Month}");
+        }
         Console.WriteLine();
 
         var items = collection.Items;

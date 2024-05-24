@@ -14,19 +14,26 @@ public static class PageExtensions
     /// <param name="name">Name of the attribute.</param>
     /// <param name="selectors">List of selectors.</param>
     /// <returns>Returns the attribute value.</returns>
-    public static async Task<string?> GetAttributeAsync(this IPage page, string name, params string[] selectors)
+    public static async Task<string?> GetAttributeOfElementAsync(this IPage? page, string name, params string[] selectors)
     {
+        if (page == null)
+        {
+            throw new ArgumentNullException(nameof(page));
+        }
+
         if (selectors.Length == 0)
         {
-            return await page.GetAttributeAsync(name).ConfigureAwait(false);
+            throw new ArgumentException("Selectors must be provided", nameof(selectors));
         }
+
         if (selectors.Length == 1)
         {
             return await page.Locator(selectors[0]).GetAttributeAsync(name).ConfigureAwait(false);
         }
 
         var text = page.Locator(selectors[0]);
-        return await text.GetAttributeAsync(name, selectors[1..]).ConfigureAwait(false);
+
+        return await text.GetAttributeOfElementAsync(name, selectors[1..]).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -37,19 +44,26 @@ public static class PageExtensions
     /// <param name="index">Index of the element.</param>
     /// <param name="selectors">List of selectors.</param>
     /// <returns>Returns the attribute value.</returns>
-    public static async Task<string?> GetNthAttributeAsync(this IPage page, string name, int index = 0, params string[] selectors)
+    public static async Task<string?> GetAttributeOfNthElementAsync(this IPage? page, string name, int index = 0, params string[] selectors)
     {
+        if (page == null)
+        {
+            throw new ArgumentNullException(nameof(page));
+        }
+
         if (selectors.Length == 0)
         {
-            return await page.GetAttributeAsync(name).ConfigureAwait(false);
+            throw new ArgumentException("Selectors must be provided", nameof(selectors));
         }
+
         if (selectors.Length == 1)
         {
             return await page.Locator(selectors[0]).Nth(index).GetAttributeAsync(name).ConfigureAwait(false);
         }
 
         var text = page.Locator(selectors[0]);
-        return await text.GetNthAttributeAsync(name, index, selectors[1..]).ConfigureAwait(false);
+
+        return await text.GetAttributeOfNthElementAsync(name, index, selectors[1..]).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -58,19 +72,26 @@ public static class PageExtensions
     /// <param name="page"><see cref="IPage"/> instance.</param>
     /// <param name="selectors">List of selectors.</param>
     /// <returns>Returns the element value.</returns>
-    public static async Task<string?> GetTextContentAsync(this IPage page, params string[] selectors)
+    public static async Task<string?> GetTextOfElementAsync(this IPage? page, params string[] selectors)
     {
+        if (page == null)
+        {
+            throw new ArgumentNullException(nameof(page));
+        }
+
         if (selectors.Length == 0)
         {
-            return default;
+            throw new ArgumentException("Selectors must be provided", nameof(selectors));
         }
+
         if (selectors.Length == 1)
         {
             return await page.Locator(selectors[0]).TextContentAsync().ConfigureAwait(false);
         }
 
         var text = page.Locator(selectors[0]);
-        return await text.GetTextContentAsync(selectors[1..]).ConfigureAwait(false);
+
+        return await text.GetTextOfElementAsync(selectors[1..]).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -80,18 +101,25 @@ public static class PageExtensions
     /// <param name="index">Index of the element.</param>
     /// <param name="selectors">List of selectors.</param>
     /// <returns>Returns the element value.</returns>
-    public static async Task<string?> GetNthTextContentAsync(this IPage page, int index = 0, params string[] selectors)
+    public static async Task<string?> GetTextOfNthElementAsync(this IPage? page, int index = 0, params string[] selectors)
     {
+        if (page == null)
+        {
+            throw new ArgumentNullException(nameof(page));
+        }
+
         if (selectors.Length == 0)
         {
-            return default;
+            throw new ArgumentException("Selectors must be provided", nameof(selectors));
         }
+
         if (selectors.Length == 1)
         {
             return await page.Locator(selectors[0]).Nth(index).TextContentAsync().ConfigureAwait(false);
         }
 
         var text = page.Locator(selectors[0]);
-        return await text.GetNthTextContentAsync(index, selectors[1..]).ConfigureAwait(false);
+
+        return await text.GetTextOfNthElementAsync(index, selectors[1..]).ConfigureAwait(false);
     }
 }

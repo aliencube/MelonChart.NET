@@ -14,8 +14,13 @@ public static class LocatorExtensions
     /// <param name="name">Name of the attribute.</param>
     /// <param name="selectors">List of selectors.</param>
     /// <returns>Returns the attribute value.</returns>
-    public static async Task<string?> GetAttributeAsync(this ILocator locator, string name, params string[] selectors)
+    public static async Task<string?> GetAttributeOfElementAsync(this ILocator? locator, string name, params string[] selectors)
     {
+        if (locator == null)
+        {
+            throw new ArgumentNullException(nameof(locator));
+        }
+
         var text = locator;
         foreach (var selector in selectors)
         {
@@ -35,8 +40,13 @@ public static class LocatorExtensions
     /// <param name="index">Index of the element.</param>
     /// <param name="selectors">List of selectors.</param>
     /// <returns>Returns the attribute value.</returns>
-    public static async Task<string?> GetNthAttributeAsync(this ILocator locator, string name, int index = 0, params string[] selectors)
+    public static async Task<string?> GetAttributeOfNthElementAsync(this ILocator? locator, string name, int index = 0, params string[] selectors)
     {
+        if (locator == null)
+        {
+            throw new ArgumentNullException(nameof(locator));
+        }
+
         var text = locator;
         foreach (var selector in selectors)
         {
@@ -54,8 +64,13 @@ public static class LocatorExtensions
     /// <param name="locator"><see cref="ILocator"/> instance.</param>
     /// <param name="selectors">List of selectors.</param>
     /// <returns>Returns the element value.</returns>
-    public static async Task<string?> GetTextContentAsync(this ILocator locator, params string[] selectors)
+    public static async Task<string?> GetTextOfElementAsync(this ILocator? locator, params string[] selectors)
     {
+        if (locator == null)
+        {
+            throw new ArgumentNullException(nameof(locator));
+        }
+
         var text = locator;
         foreach (var selector in selectors)
         {
@@ -74,8 +89,13 @@ public static class LocatorExtensions
     /// <param name="index">Index of the element.</param>
     /// <param name="selectors">List of selectors.</param>
     /// <returns>Returns the element value.</returns>
-   public static async Task<string?> GetNthTextContentAsync(this ILocator locator, int index = 0, params string[] selectors)
+    public static async Task<string?> GetTextOfNthElementAsync(this ILocator? locator, int index = 0, params string[] selectors)
     {
+        if (locator == null)
+        {
+            throw new ArgumentNullException(nameof(locator));
+        }
+
         var text = locator;
         foreach (var selector in selectors)
         {

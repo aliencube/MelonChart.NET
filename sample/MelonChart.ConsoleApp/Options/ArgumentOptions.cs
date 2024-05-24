@@ -1,10 +1,25 @@
 ﻿namespace MelonChart.ConsoleApp.Options;
 
+/// <summary>
+/// This represents the options entity for arguments.
+/// </summary>
 public class ArgumentOptions
 {
+    /// <summary>
+    /// Gets or sets the <see cref="ChartTypes"/> value.
+    /// </summary>
     public ChartTypes ChartType { get; set; } = ChartTypes.Top100;
+
+    /// <summary>
+    /// Gets or sets the value indicating whether to display help or not.
+    /// </summary>
     public bool Help { get; set; } = false;
 
+    /// <summary>
+    /// Parses the arguments and returns the <see cref="ArgumentOptions"/> instance.
+    /// </summary>
+    /// <param name="args">List of arguments.</param>
+    /// <returns>Returns the <see cref="ArgumentOptions"/> instance.</returns>
     public static ArgumentOptions Parse(string[] args)
     {
         var options = new ArgumentOptions();

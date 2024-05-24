@@ -7,6 +7,26 @@ namespace MelonChart.Extensions;
 /// </summary>
 public static class StringExtensions
 {
+    private static readonly string[] dateFormats = { "yyyy-MM-dd",
+                                                     "yyyy-M-d",
+                                                     "MM-dd-yyyy",
+                                                     "M-d-yyyy",
+                                                     "yyyy.MM.dd",
+                                                     "yyyy.M.d",
+                                                     "MM.dd.yyyy",
+                                                     "M.d.yyyy",
+                                                     "yyyy/MM/dd",
+                                                     "yyyy/M/d",
+                                                     "MM/dd/yyyy",
+                                                     "M/d/yyyy" };
+
+    private static readonly string[] timeFormats = { "HH:mm:ss",
+                                                     "H:m:s",
+                                                     "HH:mm",
+                                                     "H:m",
+                                                     "HH.mm",
+                                                     "H.m" };
+
     /// <summary>
     /// Converts the date string value to given format.
     /// </summary>
@@ -20,7 +40,7 @@ public static class StringExtensions
             return default;
         }
 
-        if (DateTime.TryParse(value, CultureInfo.InvariantCulture, out var date))
+        if (DateTime.TryParseExact(value, dateFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, out var date))
         {
             return date.ToString(format, CultureInfo.InvariantCulture);
         }
@@ -53,7 +73,7 @@ public static class StringExtensions
             return default;
         }
 
-        if (DateTime.TryParse(value, out var time))
+        if (DateTime.TryParseExact(value, timeFormats, CultureInfo.InvariantCulture, DateTimeStyles.None, out var time))
         {
             return time.ToString(format, CultureInfo.InvariantCulture);
         }
