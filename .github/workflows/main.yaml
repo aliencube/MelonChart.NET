@@ -33,9 +33,9 @@ jobs:
       id: version
       shell: pwsh
       run: |
-        $version = $env:GITHUB_REF -replace 'refs/tags/', ''
+        $version = $env:GITHUB_REF -replace 'refs/tags/v', ''
         if ($($env:GITHUB_REF).StartsWith('refs/tags/v') -eq $false) {
-          $version = "v1.0.0"
+          $version = "1.0.0"
         }
 
         "value=$version" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
@@ -85,7 +85,7 @@ jobs:
       id: version
       shell: pwsh
       run: |
-        $version = $env:GITHUB_REF -replace 'refs/tags/', ''
+        $version = $env:GITHUB_REF -replace 'refs/tags/v', ''
         if ($($env:GITHUB_REF).StartsWith('refs/tags/v') -eq $false) {
           $version = "v1.0.0"
         }
@@ -102,7 +102,7 @@ jobs:
       uses: softprops/action-gh-release@v2
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
-        tag_name: ${{ steps.version.outputs.value }}
+        tag_name: "v${{ steps.version.outputs.value }}"
         files: ./published/*.*
         generate_release_notes: true
 
