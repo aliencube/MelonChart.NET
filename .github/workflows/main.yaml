@@ -66,7 +66,7 @@ jobs:
       if: ${{ startsWith(github.ref, 'refs/tags/v') && matrix.os == 'ubuntu-latest' }}
       shell: bash
       run: |
-        dotnet pack ./src/MelonChart -c Release -o published --include-symbols
+        dotnet pack ./src/MelonChart -c Release -o published --include-symbols -p:Version=${{ steps.version.outputs.value }}
 
     - name: Upload Artifact
       if: ${{ startsWith(github.ref, 'refs/tags/v') && matrix.os == 'ubuntu-latest' }}
@@ -116,4 +116,4 @@ jobs:
     - name: Release to NuGet
       shell: bash
       run: |
-        dotnet nuget push ./published/*.* --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }}
+        dotnet nuget push ./published/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }}
