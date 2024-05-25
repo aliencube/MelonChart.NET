@@ -53,8 +53,9 @@ jobs:
     - name: Install Playwright
       shell: pwsh
       run: |
-        $playwright = Get-ChildItem -File playwright.ps1 -Path ./sample -Recurse
-        & "$playwright" install
+        $playwright = Get-ChildItem -File Microsoft.Playwright.dll -Path . -Recurse
+        $installer = "$($playwright[0].Directory.FullName)/playwright.ps1"
+        & "$installer" install
 
     - name: Test solution
       shell: bash
