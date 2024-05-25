@@ -1,0 +1,60 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <LangVersion>latest</LangVersion>
+
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+
+    <IsPackable>true</IsPackable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+
+    <PackageId>MelonChart.NET</PackageId>
+    <Version>1.0.0</Version>
+
+    <Title>MelonChart.NET</Title>
+    <Authors>Justin Yoo</Authors>
+    <Company>Aliencube Community</Company>
+    <Product>MelonChart.NET</Product>
+    <Summary>Melon Chart scraping library</Summary>
+    <Description>This is a library that scrapes the Melon Chart in .NET - Top 100, Hot 100, Daily 100, Weekly 100 and Monthly 100</Description>
+    <Copyright>© Aliencube Community. All rights reserved.</Copyright>
+    <Owners>justinyoo</Owners>
+
+    <PackageProjectUrl>https://github.com/aliencube/MelonChart.NET</PackageProjectUrl>
+    <PackageIcon>MelonChart.NET.png</PackageIcon>
+    <PackageIconUrl>https://raw.githubusercontent.com/aliencube/MelonChart.NET/main/assets/MelonChart.NET.png</PackageIconUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageTags>melon;melon-chart</PackageTags>
+
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+
+    <RepositoryUrl>https://github.com/aliencube/MelonChart.NET</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+
+    <IncludeSymbols>True</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\..\assets\MelonChart.NET.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Playwright" Version="1.44.0" />
+  </ItemGroup>
+
+</Project>
