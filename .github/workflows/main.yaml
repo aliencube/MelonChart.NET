@@ -50,6 +50,12 @@ jobs:
       run: |
         dotnet build -c Release -p:Version=${{ steps.version.outputs.value }}
 
+    - name: Install Playwright
+      shell: pwsh
+      run: |
+        $playwright = Get-ChildItem -File playwright.ps1 -Path ./src/MelonChart -Recurse
+        & "$playwright.FullName" install
+
     - name: Test solution
       shell: bash
       run: |
