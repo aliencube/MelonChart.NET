@@ -54,7 +54,7 @@ jobs:
       shell: pwsh
       run: |
         $playwright = Get-ChildItem -File playwright.ps1 -Path ./src/MelonChart -Recurse
-        & "$($playwright).FullName" install
+        & "$playwright" install
 
     - name: Test solution
       shell: bash
