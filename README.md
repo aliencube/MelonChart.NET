@@ -1,6 +1,6 @@
-# MelonChart.NET
+# MelonChart.NET [![NuGet Version](https://img.shields.io/nuget/v/MelonChart.NET?logo=nuget)](https://www.nuget.org/packages/MelonChart.NET) [![NuGet Downloads](https://img.shields.io/nuget/dt/MelonChart.NET?logo=nuget)](https://www.nuget.org/packages/MelonChart.NET)
 
-This is the Melon chart scraping library written in .NET - Top 100, Hot 100, Daily, Weekly and Monthly
+This is the Melon chart scraping library written in .NET - Top 100, Hot 100, Daily 100, Weekly 100 and Monthly 100
 
 ## Prerequisites
 
@@ -58,30 +58,30 @@ This is the Melon chart scraping library written in .NET - Top 100, Hot 100, Dai
     app.MapGet("/top100", async ([FromKeyedServices(ChartTypes.Top100)] IChart chart) =>
     {
         var collection = await chart.GetChartAsync();
-        return Results.Json(collection.Select(p => new { p.Rank, p.Title, p.Artist }));
+        return Results.Json(collection.Items);
     });
     
     app.MapGet("/hot100", async ([FromKeyedServices(ChartTypes.Hot100)] IChart chart) =>
     {
         var collection = await chart.GetChartAsync();
-        return Results.Json(collection.Select(p => new { p.Rank, p.Title, p.Artist }));
+        return Results.Json(collection.Items);
     });
     
     app.MapGet("/daily100", async ([FromKeyedServices(ChartTypes.Daily100)] IChart chart) =>
     {
         var collection = await chart.GetChartAsync();
-        return Results.Json(collection.Select(p => new { p.Rank, p.Title, p.Artist }));
+        return Results.Json(collection.Items);
     });
     
     app.MapGet("/weekly100", async ([FromKeyedServices(ChartTypes.Weekly100)] IChart chart) =>
     {
         var collection = await chart.GetChartAsync();
-        return Results.Json(collection.Select(p => new { p.Rank, p.Title, p.Artist }));
+        return Results.Json(collection.Items);
     });
     
     app.MapGet("/monthly100", async ([FromKeyedServices(ChartTypes.Monthly100)] IChart chart) =>
     {
         var collection = await chart.GetChartAsync();
-        return Results.Json(collection.Select(p => new { p.Rank, p.Title, p.Artist }));
+        return Results.Json(collection.Items);
     });
     ```
