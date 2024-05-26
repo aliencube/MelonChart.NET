@@ -1,0 +1,77 @@
+﻿@using MelonChart.Models
+@using MelonChart.WebApp.Services
+@inject IMelonChartService Chart
+
+<div class="container">
+    @if (this.Collection == null)
+    {
+        <p>@Message</p>
+    }
+    else
+    {
+        <h3>@Period</h3>
+        <table class="table">
+                    <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Title</th>
+                    <th>Artist</th>
+                    <th colspan="2">Album</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in this.Collection.Items)
+                {
+                    <tr>
+                        <td class="align-middle">@item.Rank</td>
+                        <td class="align-middle">@item.Title</td>
+                        <td class="align-middle">@item.Artist</td>
+                        <td class="align-middle"><img src="@item.Image" alt="@item.Album" /> @item.Album</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public ChartTypes ChartType { get; set; }
+
+    protected string? Message { get; set; } = "Loading...";
+    protected string? Period { get; set; }
+    protected ChartItemCollection? Collection { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            this.Collection = await Chart.RunAsync(this.ChartType);
+            switch (this.Collection.ChartType)
+            {
+                case ChartTypes.Top100:
+                case ChartTypes.Hot100:
+                default:
+                    this.Period = $"Date/Time: {this.Collection.DateLastUpdated} {this.Collection.TimeLastUpdated}";
+                    break;
+
+                case ChartTypes.Daily100:
+                    this.Period = $"Date: {this.Collection.DateLastUpdated}";
+                    break;
+
+                case ChartTypes.Weekly100:
+                    this.Period = $"Week: {this.Collection.PeriodFrom} - {this.Collection.PeriodTo}";
+                    break;
+
+                case ChartTypes.Monthly100:
+                    this.Period = $"Month: {this.Collection.Year}-{this.Collection.Month}";
+                    break;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            this.Message = ex.Message;
+        }
+    }
+}

@@ -15,6 +15,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{ACA1
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MelonChart.ConsoleApp", "samples\MelonChart.ConsoleApp\MelonChart.ConsoleApp.csproj", "{FA517387-3495-4649-81D3-AF51A9A683B8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MelonChart.WebApp", "samples\MelonChart.WebApp\MelonChart.WebApp.csproj", "{1515CA58-4FAF-4F89-898C-599E55694F84}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{FA517387-3495-4649-81D3-AF51A9A683B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA517387-3495-4649-81D3-AF51A9A683B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA517387-3495-4649-81D3-AF51A9A683B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1515CA58-4FAF-4F89-898C-599E55694F84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1515CA58-4FAF-4F89-898C-599E55694F84}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1515CA58-4FAF-4F89-898C-599E55694F84}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1515CA58-4FAF-4F89-898C-599E55694F84}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -41,6 +47,7 @@ Global
 		{8C61EBBC-B2B6-4C3D-A7AA-2D9569EAE8DC} = {3D03FD67-99F7-4245-83C4-230456C5D9F5}
 		{48FBE532-F50C-4CE5-A61D-86B5921B9ACE} = {8CF3DBA1-84DB-4274-86EA-3BB54B7262C0}
 		{FA517387-3495-4649-81D3-AF51A9A683B8} = {ACA1464B-2D70-4B57-B6A6-2E399931AC0A}
+		{1515CA58-4FAF-4F89-898C-599E55694F84} = {ACA1464B-2D70-4B57-B6A6-2E399931AC0A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {34032734-030B-4982-8F04-9138EFCDF681}

@@ -1,0 +1,38 @@
+﻿@page "/"
+@using MelonChart.WebApp.Components.UI
+@using Microsoft.AspNetCore.WebUtilities
+@inject NavigationManager NavManager
+
+<PageTitle>Melon Chart</PageTitle>
+
+<div class="container">
+    <h1>Melon Chart &ndash; @ChartType</h1>
+
+    <div>
+        <a class="btn btn-primary" href="?chart=top100" @onclick="@(() => OnClickAsync(ChartTypes.Top100))">Top 100</a>
+        <a class="btn btn-success" href="?chart=hot100" @onclick="@(() => OnClickAsync(ChartTypes.Hot100))">Hot 100</a>
+        <a class="btn btn-warning" href="?chart=daily100" @onclick="@(() => OnClickAsync(ChartTypes.Daily100))">Daily 100</a>
+        <a class="btn btn-info" href="?chart=weekly100" @onclick="@(() => OnClickAsync(ChartTypes.Weekly100))">Weekly 100</a>
+        <a class="btn btn-secondary" href="?chart=monthly100" @onclick="@(() => OnClickAsync(ChartTypes.Monthly100))">Monthly 100</a>
+    </div>
+
+    <ChartComponent ChartType="@ChartType" />
+</div>
+
+@code {
+    protected ChartTypes ChartType { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var uri = new Uri(NavManager.Uri);
+        var query = QueryHelpers.ParseQuery(uri.Query);
+        var chart = query.TryGetValue("chart", out var chartType) ? chartType.ToString() : "top100";
+        this.ChartType = Enum.TryParse<ChartTypes>(chart, ignoreCase: true, out var result) ? result : ChartTypes.Top100;
+    }
+
+    protected async Task OnClickAsync(ChartTypes chartType)
+    {
+        this.ChartType = chartType;
+        NavManager.NavigateTo($"?chart={chartType.ToString().ToLowerInvariant()}", forceLoad: true);
+    }
+}
