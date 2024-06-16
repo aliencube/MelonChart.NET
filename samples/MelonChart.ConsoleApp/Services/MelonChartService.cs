@@ -1,4 +1,8 @@
-﻿using MelonChart.Abstractions;
+﻿using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+
+using MelonChart.Abstractions;
 using MelonChart.ConsoleApp.Options;
 using MelonChart.Models;
 
@@ -11,6 +15,14 @@ namespace MelonChart.ConsoleApp.Services;
 public class MelonChartService(IEnumerable<IChart> charts) : IMelonChartService
 {
     private readonly IEnumerable<IChart> _charts = charts ?? throw new ArgumentNullException(nameof(charts));
+
+    private static JsonSerializerOptions jso = new()
+    {
+        WriteIndented = true,
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+        Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) },
+    };
 
     /// <inheritdoc />
     public async Task RunAsync(string[] args)
@@ -31,6 +43,12 @@ public class MelonChartService(IEnumerable<IChart> charts) : IMelonChartService
             }
 
             var collection = await chart.GetChartAsync().ConfigureAwait(false);
+            if (options.OutputAsJson)
+            {
+                Console.WriteLine(JsonSerializer.Serialize(collection, jso));
+                return;
+            }
+
             this.DisplayDetails(collection);
         }
         catch (Exception ex)
@@ -67,11 +85,11 @@ public class MelonChartService(IEnumerable<IChart> charts) : IMelonChartService
 
         var items = collection.Items;
 
-        Console.WriteLine("Rank\tTitle\tArtist\tAlbum");
-        Console.WriteLine("----\t-----\t------\t-----");
+        Console.WriteLine("Rank\tStatus\tTitle\tArtist\tAlbum");
+        Console.WriteLine("----\t-----\t-----\t------\t-----");
         foreach (var item in items)
         {
-            Console.WriteLine($"{item.Rank}\t{item.Title}\t{item.Artist}\t{item.Album}");
+            Console.WriteLine($"{item.Rank}\t{this.GetRankStatus(item)}\t{item.Title}\t{item.Artist}\t{item.Album}");
         }
     }
 
@@ -79,6 +97,19 @@ public class MelonChartService(IEnumerable<IChart> charts) : IMelonChartService
     {
         Console.WriteLine("Usage:");
         Console.WriteLine("  -c, -t, --chart, --type, --chart-type <chart-type>    Chart type - 'Top100', 'Hot100', 'Daily100', 'Weekly100' or 'Monthly100'.");
+        Console.WriteLine("  --json                                                Output in JSON format");
         Console.WriteLine("  -h, --help                                            Display help");
+    }
+
+    private string GetRankStatus(ChartItem item)
+    {
+        return item.RankStatus switch
+        {
+            RankStatus.None => "--",
+            RankStatus.Up => $"+{item.RankStatusValue}",
+            RankStatus.Down => $"-{item.RankStatusValue}",
+            RankStatus.New => "new",
+            _ => "Unknown",
+        };
     }
 }

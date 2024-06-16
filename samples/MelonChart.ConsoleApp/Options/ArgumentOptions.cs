@@ -11,6 +11,11 @@ public class ArgumentOptions
     public ChartTypes ChartType { get; set; } = ChartTypes.Top100;
 
     /// <summary>
+    /// Gets or sets the value indicating whether to output as JSON or not.
+    /// </summary>
+    public bool OutputAsJson { get; set; } = false;
+
+    /// <summary>
     /// Gets or sets the value indicating whether to display help or not.
     /// </summary>
     public bool Help { get; set; } = false;
@@ -43,6 +48,10 @@ public class ArgumentOptions
                             ? result
                             : throw new ArgumentException("Invalid chart type. It should be 'Top100', 'Hot100', 'Daily100', 'Weekly100' or 'Monthly100'.")
                         : throw new ArgumentException("Invalid chart type. It should be 'Top100', 'Hot100', 'Daily100', 'Weekly100' or 'Monthly100'.");
+                    break;
+
+                case "--json":
+                    options.OutputAsJson = true;
                     break;
 
                 case "-h":
