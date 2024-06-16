@@ -1,0 +1,63 @@
+name: Daily Scrape
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "30 5 * * *"
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Run scraper
+      run: |
+        # Add your scraping command here
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.x'
+
+    - name: Restore NuGet packages
+      shell: bash
+      run: |
+        dotnet restore
+
+    - name: Build solution
+      shell: bash
+      run: |
+        dotnet build -c Release
+
+    - name: Install Playwright
+      shell: pwsh
+      run: |
+        $playwright = Get-ChildItem -File Microsoft.Playwright.dll -Path . -Recurse
+        $installer = "$($playwright[0].Directory.FullName)/playwright.ps1"
+        & "$installer" install
+
+    - name: Run scraper app - Daily 100
+      shell: pwsh
+      run: |
+        $date = (Get-Date).ToUniversalTime().AddHours(9).ToString("yyyyMMdd")
+        $result = dotnet run --project ./samples/MelonChart.ConsoleApp/ -- -c Daily100 --json | ConvertFrom-Json
+
+        mkdir -p ./data
+        pushd ./data
+        $result | ConvertTo-Json -Depth 100 | Out-File -FilePath "daily100-$date.json" -Force
+        popd
+
+    - name: Upload data
+      uses: stefanzweifel/git-auto-commit-action@v5
+      with:
+        commit_message: "Update data"
+        branch: "main"
+        commit_user_name: "GitHub Actions"
+        commit_user_email: "scraper+github-actions[bot]@users.noreply.github.com"
+        commit_author: "GitHub Actions <scraper+github-actions[bot]@users.noreply.github.com>"
