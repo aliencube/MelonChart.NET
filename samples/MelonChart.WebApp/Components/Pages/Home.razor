@@ -28,11 +28,15 @@
         var query = QueryHelpers.ParseQuery(uri.Query);
         var chart = query.TryGetValue("chart", out var chartType) ? chartType.ToString() : "top100";
         this.ChartType = Enum.TryParse<ChartTypes>(chart, ignoreCase: true, out var result) ? result : ChartTypes.Top100;
+
+        await Task.CompletedTask;
     }
 
     protected async Task OnClickAsync(ChartTypes chartType)
     {
         this.ChartType = chartType;
         NavManager.NavigateTo($"?chart={chartType.ToString().ToLowerInvariant()}", forceLoad: true);
+
+        await Task.CompletedTask;
     }
 }

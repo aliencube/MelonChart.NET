@@ -67,11 +67,11 @@ public class MelonChartService(IEnumerable<IChart> charts) : IMelonChartService
 
         var items = collection.Items;
 
-        Console.WriteLine("Rank\tTitle\tArtist\tAlbum");
-        Console.WriteLine("----\t-----\t------\t-----");
+        Console.WriteLine("Rank\tStatus\tTitle\tArtist\tAlbum");
+        Console.WriteLine("----\t-----\t-----\t------\t-----");
         foreach (var item in items)
         {
-            Console.WriteLine($"{item.Rank}\t{item.Title}\t{item.Artist}\t{item.Album}");
+            Console.WriteLine($"{item.Rank}\t{this.GetRankStatus(item)}\t{item.Title}\t{item.Artist}\t{item.Album}");
         }
     }
 
@@ -80,5 +80,17 @@ public class MelonChartService(IEnumerable<IChart> charts) : IMelonChartService
         Console.WriteLine("Usage:");
         Console.WriteLine("  -c, -t, --chart, --type, --chart-type <chart-type>    Chart type - 'Top100', 'Hot100', 'Daily100', 'Weekly100' or 'Monthly100'.");
         Console.WriteLine("  -h, --help                                            Display help");
+    }
+
+    private string GetRankStatus(ChartItem item)
+    {
+        return item.RankStatus switch
+        {
+            RankStatus.None => "--",
+            RankStatus.Up => $"+{item.RankStatusValue}",
+            RankStatus.Down => $"-{item.RankStatusValue}",
+            RankStatus.New => "new",
+            _ => "Unknown",
+        };
     }
 }

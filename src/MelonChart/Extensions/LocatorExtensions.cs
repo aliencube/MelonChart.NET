@@ -38,9 +38,11 @@ public static class LocatorExtensions
     /// <param name="locator"><see cref="ILocator"/> instance.</param>
     /// <param name="name">Name of the attribute.</param>
     /// <param name="index">Index of the element.</param>
+    /// <param name="useFallbackValue">Value indicating whether to use the fallback value or not.</param>
+    /// <param name="fallbackValue">Fallback value.</param>
     /// <param name="selectors">List of selectors.</param>
     /// <returns>Returns the attribute value.</returns>
-    public static async Task<string?> GetAttributeOfNthElementAsync(this ILocator? locator, string name, int index = 0, params string[] selectors)
+    public static async Task<string?> GetAttributeOfNthElementAsync(this ILocator? locator, string name, int index = 0, bool useFallbackValue = false, string? fallbackValue = null, params string[] selectors)
     {
         if (locator == null)
         {
@@ -53,7 +55,22 @@ public static class LocatorExtensions
             text = text.Locator(selector);
         }
 
-        var value = await text.Nth(index).GetAttributeAsync(name).ConfigureAwait(false);
+        string? value = default;
+        try
+        {
+            value = await text.Nth(index).GetAttributeAsync(name).ConfigureAwait(false);
+        }
+        catch
+        {
+            if (useFallbackValue)
+            {
+                value = fallbackValue;
+            }
+            else
+            {
+                throw;
+            }
+        }
 
         return value;
     }
@@ -87,9 +104,11 @@ public static class LocatorExtensions
     /// </summary>
     /// <param name="locator"><see cref="ILocator"/> instance.</param>
     /// <param name="index">Index of the element.</param>
+    /// <param name="useFallbackValue">Value indicating whether to use the fallback value or not.</param>
+    /// <param name="fallbackValue">Fallback value.</param>
     /// <param name="selectors">List of selectors.</param>
     /// <returns>Returns the element value.</returns>
-    public static async Task<string?> GetTextOfNthElementAsync(this ILocator? locator, int index = 0, params string[] selectors)
+    public static async Task<string?> GetTextOfNthElementAsync(this ILocator? locator, int index = 0, bool useFallbackValue = false, string? fallbackValue = null, params string[] selectors)
     {
         if (locator == null)
         {
@@ -102,7 +121,22 @@ public static class LocatorExtensions
             text = text.Locator(selector);
         }
 
-        var value = await text.Nth(index).TextContentAsync().ConfigureAwait(false);
+        string? value = default;
+        try
+        {
+            value = await text.Nth(index).TextContentAsync().ConfigureAwait(false);
+        }
+        catch
+        {
+            if (useFallbackValue)
+            {
+                value = fallbackValue;
+            }
+            else
+            {
+                throw;
+            }
+        }
 
         return value;
     }

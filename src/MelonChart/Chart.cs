@@ -50,41 +50,52 @@ public abstract class Chart : IChart
         await this.SetDateTimeAsync();
 
         var top50 = await this.Page.Locator("tr[class='lst50']").AllAsync();
-        foreach (var tr in top50)
-        {
-            var songId = await tr.GetAttributeOfElementAsync("data-song-no").ConfigureAwait(false);
-            var rank = await tr.GetTextOfElementAsync("span[class='rank ']").ConfigureAwait(false);
-            var title = await tr.GetTextOfElementAsync("div[class='ellipsis rank01']",
-                                                       "span",
-                                                       "a").ConfigureAwait(false);
-            var artist = await tr.GetTextOfNthElementAsync(0, "div[class='ellipsis rank02']",
-                                                              "a").ConfigureAwait(false);
-            var album = await tr.GetTextOfElementAsync("div[class='ellipsis rank03']",
-                                                       "a").ConfigureAwait(false);
-            var image = await tr.GetAttributeOfElementAsync("src", "img[onerror='WEBPOCIMG.defaultAlbumImg(this);']")
-                                .ConfigureAwait(false);
-
-            this.Collection.Items.Add(new ChartItem(songId, rank, title, artist, album, image));
-        }
+        this.Collection.Items.AddRange(await this.GetChartItemsAsync(top50).ConfigureAwait(false));
 
         var bottom50 = await this.Page.Locator("tr[class='lst100']").AllAsync();
-        foreach (var tr in bottom50)
-        {
-            var songId = await tr.GetAttributeOfElementAsync("data-song-no").ConfigureAwait(false);
-            var rank = await tr.GetTextOfElementAsync("span[class='rank ']").ConfigureAwait(false);
-            var title = await tr.GetTextOfElementAsync("div[class='ellipsis rank01']",
-                                                       "span",
-                                                       "a").ConfigureAwait(false);
-            var artist = await tr.GetTextOfNthElementAsync(0, "div[class='ellipsis rank02']",
-                                                              "a").ConfigureAwait(false);
-            var album = await tr.GetTextOfElementAsync("div[class='ellipsis rank03']",
-                                                       "a").ConfigureAwait(false);
-            var image = await tr.GetAttributeOfElementAsync("src", "img[onerror='WEBPOCIMG.defaultAlbumImg(this);']")
-                                .ConfigureAwait(false);
-
-            this.Collection.Items.Add(new ChartItem(songId, rank, title, artist, album, image));
-        }
+        this.Collection.Items.AddRange(await this.GetChartItemsAsync(bottom50).ConfigureAwait(false));
 
         return this.Collection;
+    }
+
+    private async Task<List<ChartItem>> GetChartItemsAsync(IEnumerable<ILocator> locators)
+    {
+        var items = new List<ChartItem>();
+        foreach (var locator in locators)
+        {
+            var rankStatus = await locator.GetAttributeOfNthElementAsync("class", 2,
+                                                                         useFallbackValue: true, fallbackValue: "new",
+                                                                         selectors: [ "span[class='rank_wrap']",
+                                                                                      "span" ]).ConfigureAwait(false);
+            var rankStatusValue = await locator.GetTextOfNthElementAsync(2,
+                                                                         useFallbackValue: true, fallbackValue: "0",
+                                                                         selectors: [ "span[class='rank_wrap']",
+                                                                                      "span" ]).ConfigureAwait(false);
+            var songId = await locator.GetAttributeOfElementAsync("data-song-no").ConfigureAwait(false);
+            var rank = await locator.GetTextOfElementAsync("span[class='rank ']").ConfigureAwait(false);
+            var title = await locator.GetTextOfElementAsync("div[class='ellipsis rank01']",
+                                                            "span",
+                                                            "a").ConfigureAwait(false);
+            var artist = await locator.GetTextOfNthElementAsync(0, selectors: [ "div[class='ellipsis rank02']",
+                                                                                "a" ]).ConfigureAwait(false);
+            var album = await locator.GetTextOfElementAsync("div[class='ellipsis rank03']",
+                                                            "a").ConfigureAwait(false);
+            var image = await locator.GetAttributeOfElementAsync("src", "img[onerror='WEBPOCIMG.defaultAlbumImg(this);']")
+                                     .ConfigureAwait(false);
+
+            items.Add(new ChartItem()
+                      {
+                          SongId = songId,
+                          Rank = rank,
+                          RankStatus = Enum.TryParse<RankStatus>(rankStatus, ignoreCase: true, out var result) ? result : RankStatus.Undefined,
+                          RankStatusValue = Convert.ToInt32(rankStatusValue),
+                          Title = title,
+                          Artist = artist,
+                          Album = album,
+                          Image = image,
+                      });
+        }
+
+        return items;
     }
 }

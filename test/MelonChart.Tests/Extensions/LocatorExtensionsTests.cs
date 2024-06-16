@@ -56,7 +56,7 @@ public class LocatorExtensionsTests : PageTest
     {
         var locator = default(ILocator);
 
-        Func<Task> func = async () => await locator.GetAttributeOfNthElementAsync("aaa", 0, "bbb");
+        Func<Task> func = async () => await locator.GetAttributeOfNthElementAsync("aaa", 0, selectors: ["bbb"]);
 
         await func.Should().ThrowAsync<ArgumentNullException>();
     }
@@ -66,7 +66,7 @@ public class LocatorExtensionsTests : PageTest
     [DataRow(null, "title", 0, "div[class='navbar__inner']", "div[class='navbar__items']", "button")]
     public async Task Given_Attribute_And_Index_And_Selectors_When_Invoked_GetAttributeOfElementAsync_Then_It_Should_Return_Result(string expected, string attribute, int index, params string[] selectors)
     {
-        var result = await this._locator.GetAttributeOfNthElementAsync(attribute, index, selectors);
+        var result = await this._locator.GetAttributeOfNthElementAsync(attribute, index, selectors: selectors);
 
         result.Should().Be(expected);
     }
@@ -75,7 +75,7 @@ public class LocatorExtensionsTests : PageTest
     [DataRow("aria-expanded", 0, "div[class='navbar__inner']", "div[class='navbar__items']", "article")]
     public async Task Given_Attribute_And_Index_And_NonExisting_Selectors_When_Invoked_GetAttributeOfElementAsync_Then_It_Should_Throw_Exception(string attribute, int index, params string[] selectors)
     {
-        Func<Task> func = async () => await this._locator.GetAttributeOfNthElementAsync(attribute, index, selectors);
+        Func<Task> func = async () => await this._locator.GetAttributeOfNthElementAsync(attribute, index, selectors: selectors);
 
         await func.Should().ThrowAsync<TimeoutException>();
     }
@@ -114,7 +114,7 @@ public class LocatorExtensionsTests : PageTest
     {
         var locator = default(ILocator);
 
-        Func<Task> func = async () => await locator.GetTextOfNthElementAsync(0, "aaa", "bbb");
+        Func<Task> func = async () => await locator.GetTextOfNthElementAsync(0, selectors: ["aaa", "bbb"]);
 
         await func.Should().ThrowAsync<ArgumentNullException>();
     }
@@ -123,7 +123,7 @@ public class LocatorExtensionsTests : PageTest
     [DataRow("Docs", 0, "div[class='navbar__inner']", "div[class='navbar__items']", "a[class='navbar__item navbar__link']")]
     public async Task Given_Attribute_And_Index_And_Selectors_When_Invoked_GetTextOfNthElementAsync_Then_It_Should_Return_Result(string expected, int index, params string[] selectors)
     {
-        var result = await this._locator.GetTextOfNthElementAsync(index, selectors);
+        var result = await this._locator.GetTextOfNthElementAsync(index, selectors: selectors);
 
         result.Should().Be(expected);
     }
@@ -132,7 +132,7 @@ public class LocatorExtensionsTests : PageTest
     [DataRow(0, "div[class='navbar__inner']", "div[class='navbar__items']", "article")]
     public async Task Given_Attribute_And_Index_And_NonExisting_Selectors_When_Invoked_GetTextOfNthElementAsync_Then_It_Should_Throw_Exception(int index, params string[] selectors)
     {
-        Func<Task> func = async () => await this._locator.GetTextOfNthElementAsync(index, selectors);
+        Func<Task> func = async () => await this._locator.GetTextOfNthElementAsync(index, selectors: selectors);
 
         await func.Should().ThrowAsync<TimeoutException>();
     }

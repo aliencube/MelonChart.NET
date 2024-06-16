@@ -60,7 +60,7 @@ public class PageExtensionsTests : PageTest
     {
         var page = default(IPage);
 
-        Func<Task> func = async () => await page.GetAttributeOfNthElementAsync("attribute", 0, "selector");
+        Func<Task> func = async () => await page.GetAttributeOfNthElementAsync("attribute", 0, selectors: ["selector"]);
 
         await func.Should().ThrowAsync<ArgumentNullException>();
     }
@@ -78,7 +78,7 @@ public class PageExtensionsTests : PageTest
     [DataRow(null, "title", 0, "div[class='navbar__inner']", "div[class='navbar__items']", "button")]
     public async Task Given_Attribute_And_Index_And_Selectors_When_Invoked_GetAttributeOfElementAsync_Then_It_Should_Return_Result(string expected, string attribute, int index, params string[] selectors)
     {
-        var result = await this.Page.GetAttributeOfNthElementAsync(attribute, index, selectors);
+        var result = await this.Page.GetAttributeOfNthElementAsync(attribute, index, selectors: selectors);
 
         result.Should().Be(expected);
     }
@@ -87,7 +87,7 @@ public class PageExtensionsTests : PageTest
     [DataRow("aria-expanded", 0, "div[class='navbar__inner']", "div[class='navbar__items']", "article")]
     public async Task Given_Attribute_And_Index_And_NonExisting_Selectors_When_Invoked_GetAttributeOfElementAsync_Then_It_Should_Throw_Exception(string attribute, int index, params string[] selectors)
     {
-        Func<Task> func = async () => await this.Page.GetAttributeOfNthElementAsync(attribute, index, selectors);
+        Func<Task> func = async () => await this.Page.GetAttributeOfNthElementAsync(attribute, index, selectors: selectors);
 
         await func.Should().ThrowAsync<TimeoutException>();
     }
@@ -134,7 +134,7 @@ public class PageExtensionsTests : PageTest
     {
         var page = default(IPage);
 
-        Func<Task> func = async () => await page.GetTextOfNthElementAsync(0, "selector");
+        Func<Task> func = async () => await page.GetTextOfNthElementAsync(0, selectors: ["selector"]);
 
         await func.Should().ThrowAsync<ArgumentNullException>();
     }
@@ -151,7 +151,7 @@ public class PageExtensionsTests : PageTest
     [DataRow("Docs", 0, "div[class='navbar__inner']", "div[class='navbar__items']", "a[class='navbar__item navbar__link']")]
     public async Task Given_Attribute_And_Index_And_Selectors_When_Invoked_GetTextOfNthElementAsync_Then_It_Should_Return_Result(string expected, int index, params string[] selectors)
     {
-        var result = await this.Page.GetTextOfNthElementAsync(index, selectors);
+        var result = await this.Page.GetTextOfNthElementAsync(index, selectors: selectors);
 
         result.Should().Be(expected);
     }
@@ -160,7 +160,7 @@ public class PageExtensionsTests : PageTest
     [DataRow(0, "div[class='navbar__inner']", "div[class='navbar__items']", "article")]
     public async Task Given_Attribute_And_Index_And_NonExisting_Selectors_When_Invoked_GetTextOfNthElementAsync_Then_It_Should_Throw_Exception(int index, params string[] selectors)
     {
-        Func<Task> func = async () => await this.Page.GetTextOfNthElementAsync(index, selectors);
+        Func<Task> func = async () => await this.Page.GetTextOfNthElementAsync(index, selectors: selectors);
 
         await func.Should().ThrowAsync<TimeoutException>();
     }

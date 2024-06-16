@@ -16,14 +16,31 @@
                     <th>Rank</th>
                     <th>Title</th>
                     <th>Artist</th>
-                    <th colspan="2">Album</th>
+                    <th>Album</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var item in this.Collection.Items)
                 {
                     <tr>
-                        <td class="align-middle">@item.Rank</td>
+                        <td class="align-middle">
+                            @item.Rank 
+                            @switch (item.RankStatus)
+                            {
+                                case RankStatus.Up:
+                                    <i class="bi bi-caret-up-fill"></i>@item.RankStatusValue
+                                    break;
+                                case RankStatus.Down:
+                                    <i class="bi bi-caret-down-fill"></i>@item.RankStatusValue
+                                    break;
+                                case RankStatus.New:
+                                    <i class="bi bi-box-arrow-in-left"></i>
+                                    break;
+                                default:
+                                    <i class="bi bi-dash"></i>
+                                    break;
+                            }
+                        </td>
                         <td class="align-middle">@item.Title</td>
                         <td class="align-middle">@item.Artist</td>
                         <td class="align-middle"><img src="@item.Image" alt="@item.Album" /> @item.Album</td>

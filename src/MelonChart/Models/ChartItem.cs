@@ -3,41 +3,45 @@
 /// <summary>
 /// This represents the model entity for chart item.
 /// </summary>
-/// <param name="songId">Song ID.</param>
-/// <param name="rank">Rank of the song.</param>
-/// <param name="title">Title of the song.</param>
-/// <param name="artist">Artist who sings the song.</param>
-/// <param name="album">Album that the song contains.</param>
-/// <param name="image">Image URL of the song.</param>
-public class ChartItem(string? songId, string? rank, string? title, string? artist, string? album, string? image)
+public class ChartItem
 {
     /// <summary>
-    /// Gets the song ID.
+    /// Gets or sets the song ID.
     /// </summary>
-    public string? SongId { get; } = songId;
+    public string? SongId { get; set; }
 
     /// <summary>
-    /// Gets the rank of the song.
+    /// Gets or sets the rank of the song.
     /// </summary>
-    public string? Rank { get; } = rank;
+    public string? Rank { get; set; }
 
     /// <summary>
-    /// Gets the title of the song.
+    /// Gets or sets the rank up or down.
     /// </summary>
-    public string? Title { get; } = title;
+    public RankStatus RankStatus { get; set; }
 
     /// <summary>
-    /// Gets the artist who sings the song.
+    /// Gets or sets the rank up or down value.
     /// </summary>
-    public string? Artist { get; } = artist;
+    public int? RankStatusValue { get; set; }
 
     /// <summary>
-    /// Gets the album that the song contains.
+    /// Gets or sets the title of the song.
     /// </summary>
-    public string? Album { get; } = album;
+    public string? Title { get; set; }
 
     /// <summary>
-    /// Gets the image URL of the song.
+    /// Gets or sets the artist who sings the song.
     /// </summary>
-    public string? Image { get; } = image;
+    public string? Artist { get; set; }
+
+    /// <summary>
+    /// Gets or sets the album that the song contains.
+    /// </summary>
+    public string? Album { get; set; }
+
+    /// <summary>
+    /// Gets or sets the image URL of the song.
+    /// </summary>
+    public string? Image { get; set; }
 }
