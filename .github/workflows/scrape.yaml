@@ -3,7 +3,7 @@ name: Daily Scrape
 on:
   workflow_dispatch:
   schedule:
-    - cron: "30 5 * * *"
+    - cron: "30 20 * * *"
 
 jobs:
   scrape:
@@ -42,15 +42,30 @@ jobs:
         $installer = "$($playwright[0].Directory.FullName)/playwright.ps1"
         & "$installer" install
 
+    - name: Run scraper app - Top 100
+      shell: pwsh
+      run: |
+        $date = (Get-Date).ToUniversalTime().AddHours(9).ToString("yyyyMMdd")
+        # $result = dotnet run --project ./samples/MelonChart.ConsoleApp/ -- -c Top100 --json | ConvertFrom-Json
+        $result = dotnet run --project ./samples/MelonChart.ConsoleApp/ -- -c Top100 --json
+
+        mkdir -p ./data
+        pushd ./data
+        # $result | ConvertTo-Json -Depth 100 | Out-File -FilePath "top100-$date.json" -Force
+        $result | Out-File -FilePath "top100-$date.json" -Force
+        popd
+
     - name: Run scraper app - Daily 100
       shell: pwsh
       run: |
         $date = (Get-Date).ToUniversalTime().AddHours(9).ToString("yyyyMMdd")
-        $result = dotnet run --project ./samples/MelonChart.ConsoleApp/ -- -c Daily100 --json | ConvertFrom-Json
+        # $result = dotnet run --project ./samples/MelonChart.ConsoleApp/ -- -c Daily100 --json | ConvertFrom-Json
+        $result = dotnet run --project ./samples/MelonChart.ConsoleApp/ -- -c Daily100 --json
 
         mkdir -p ./data
         pushd ./data
-        $result | ConvertTo-Json -Depth 100 | Out-File -FilePath "daily100-$date.json" -Force
+        # $result | ConvertTo-Json -Depth 100 | Out-File -FilePath "daily100-$date.json" -Force
+        $result | Out-File -FilePath "daily100-$date.json" -Force
         popd
 
     - name: Upload data
