@@ -14,15 +14,19 @@ namespace MelonChart.ConsoleApp.Services;
 /// <param name="charts">List of <see cref="IChart"/> instances.</param>
 public class MelonChartService(IEnumerable<IChart> charts) : IMelonChartService
 {
-    private readonly IEnumerable<IChart> _charts = charts ?? throw new ArgumentNullException(nameof(charts));
+#pragma warning disable IDE1006 // Naming Styles
 
-    private static JsonSerializerOptions jso = new()
+    private static readonly JsonSerializerOptions jso = new()
     {
         WriteIndented = true,
         PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
         Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
         Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) },
     };
+
+#pragma warning restore IDE1006 // Naming Styles
+
+    private readonly IEnumerable<IChart> _charts = charts ?? throw new ArgumentNullException(nameof(charts));
 
     /// <inheritdoc />
     public async Task RunAsync(string[] args)

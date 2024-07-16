@@ -83,17 +83,18 @@ public abstract class Chart : IChart
             var image = await locator.GetAttributeOfElementAsync("src", "img[onerror='WEBPOCIMG.defaultAlbumImg(this);']")
                                      .ConfigureAwait(false);
 
-            items.Add(new ChartItem()
-                      {
-                          SongId = songId,
-                          Rank = rank,
-                          RankStatus = Enum.TryParse<RankStatus>(rankStatus, ignoreCase: true, out var result) ? result : RankStatus.Undefined,
-                          RankStatusValue = Convert.ToInt32(rankStatusValue),
-                          Title = title,
-                          Artist = artist,
-                          Album = album,
-                          Image = image,
-                      });
+            var item = new ChartItem()
+            {
+                SongId = songId,
+                Rank = Convert.ToInt32(rank),
+                RankStatus = Enum.TryParse<RankStatus>(rankStatus, ignoreCase: true, out var result) ? result : RankStatus.Undefined,
+                RankStatusValue = Convert.ToInt32(rankStatusValue),
+                Title = title,
+                Artist = artist,
+                Album = album,
+                Image = image,
+            };
+            items.Add(item);
         }
 
         return items;
