@@ -1,0 +1,10 @@
+  -h, --help     Display help
+info: System.Net.Http.HttpClient.ISpotifyPlaylistService.LogicalHandler[100]
+      Start processing HTTP request GET https://apim-common5959.azure-api.net/spotify/access-token
+info: System.Net.Http.HttpClient.ISpotifyPlaylistService.ClientHandler[100]
+      Sending HTTP request GET https://apim-common5959.azure-api.net/spotify/access-token
+Name or service not known (apim-common5959.azure-api.net:443)
+Usage:
+  -s, --source   The JSON file source that contains the Melon Chart data.
+  --json         Output in JSON format
+  -h, --help     Display help
