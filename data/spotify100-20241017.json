@@ -1,0 +1,14 @@
+  -h, --help     Display help
+info: System.Net.Http.HttpClient.ISpotifyPlaylistService.LogicalHandler[100]
+      Start processing HTTP request GET https://apim-common5959.azure-api.net/spotify/access-token
+info: System.Net.Http.HttpClient.ISpotifyPlaylistService.ClientHandler[100]
+      Sending HTTP request GET https://apim-common5959.azure-api.net/spotify/access-token
+info: System.Net.Http.HttpClient.ISpotifyPlaylistService.ClientHandler[101]
+      Received HTTP response headers after 6826.19ms - 200
+info: System.Net.Http.HttpClient.ISpotifyPlaylistService.LogicalHandler[101]
+      End processing HTTP request after 6847.0425ms - 200
+Exception of type 'SpotifyAPI.Web.APIException' was thrown.
+Usage:
+  -s, --source   The JSON file source that contains the Melon Chart data.
+  --json         Output in JSON format
+  -h, --help     Display help
