@@ -1,8 +1,8 @@
 {
   "profiles": {
-    "Daily100": {
+    "Top100": {
       "commandName": "Project",
-      "commandLineArgs": "-t melon -s ../../data/daily100-20240716.json --json"
+      "commandLineArgs": "-t melon -s ../../data/top100-20241022.json --json"
     },
     "Spotify": {
       "commandName": "Project",

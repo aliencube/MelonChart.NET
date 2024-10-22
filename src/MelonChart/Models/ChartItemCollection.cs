@@ -41,7 +41,12 @@ public class ChartItemCollection
     public string? Month { get; set; }
 
     /// <summary>
-    /// Gets or sets the list of <see cref="ChartItem"/> instances.
+    /// Gets or sets the list of <see cref="ChartItem"/> instances that are listed on the Melon chart.
     /// </summary>
     public List<ChartItem> Items { get; set; } = [];
+
+    /// <summary>
+    /// Gets or sets the list of <see cref="TrackItem"/> instances that are missing from the Spotify chart.
+    /// </summary>
+    public List<TrackItem> MissingTracks { get; set; } = [];
 }
