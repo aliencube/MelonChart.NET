@@ -97,6 +97,8 @@ public class MelonChartHelper(SpotifySettings settings, JsonSerializerOptions js
         var request = new PlaylistCreateRequest(name!) { Description = description!, Public = true, Collaborative = false };
         playlist = await this.Spotify!.Playlists.Create(userId, request).ConfigureAwait(false);
 
+        await this.UpdateCoverImageAsync(playlist.Id!).ConfigureAwait(false);
+
         return playlist;
     }
 
@@ -104,6 +106,18 @@ public class MelonChartHelper(SpotifySettings settings, JsonSerializerOptions js
     {
         var request = new PlaylistChangeDetailsRequest { Description = description };
         await this.Spotify!.Playlists.ChangeDetails(playlistId, request).ConfigureAwait(false);
+        await this.UpdateCoverImageAsync(playlistId).ConfigureAwait(false);
+    }
+
+    internal async Task UpdateCoverImageAsync(string playlistId)
+    {
+        var images = await this.Spotify!.Playlists.GetCovers(playlistId).ConfigureAwait(false);
+        if (images.Count != 1)
+        {
+            var bytes = await File.ReadAllBytesAsync(Path.Combine(ProjectPathInfo.ProjectPath, "../../assets/MelonChart.NET.png")).ConfigureAwait(false);
+            var cover = Convert.ToBase64String(bytes);
+            await this.Spotify!.Playlists.UploadCover(playlistId, cover).ConfigureAwait(false);
+        }
     }
 
     internal async Task<List<PlaylistTrack<IPlayableItem>>> GetTrackItemsAsync(string playlistId)
