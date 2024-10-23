@@ -4,6 +4,9 @@ on:
   workflow_dispatch:
   schedule:
     - cron: "30 20 * * *"
+  issues:
+    types:
+      - opened
 
 jobs:
   scrape:
@@ -14,29 +17,50 @@ jobs:
       issues: write
 
     steps:
+    - name: Check to proceed
+      id: check_to_proceed
+      shell: pwsh
+      run: |
+        $proceed = "false"
+        $chartSyncRequest = "false"
+        if ("${{ github.event_name }}" -eq "workflow_dispatch") {
+          $proceed = "true"
+        } elseif ("${{ github.event_name }}" -eq "schedule") {
+          $proceed = "true"
+        } elseif ("${{ github.event_name }}" -eq "issues" -and "${{ github.event.action }}" -eq "opened") {
+          if (${{ toJson(github.event.issue.body) }} -eq "### Issue Type\n\nSync Request") {
+            $proceed = "true"
+            $chartSyncRequest = "true"
+          }
+        }
+
+        "proceed=$proceed" >> $env:GITHUB_OUTPUT
+        "chartSyncRequest=$chartSyncRequest" >> $env:GITHUB_OUTPUT
+
     - name: Checkout code
+      if: steps.check_to_proceed.outputs.proceed == 'true'
       uses: actions/checkout@v4
 
-    - name: Run scraper
-      run: |
-        # Add your scraping command here
-
     - name: Setup .NET
+      if: steps.check_to_proceed.outputs.proceed == 'true'
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '8.x'
 
     - name: Restore NuGet packages
+      if: steps.check_to_proceed.outputs.proceed == 'true'
       shell: bash
       run: |
         dotnet restore
 
     - name: Build solution
+      if: steps.check_to_proceed.outputs.proceed == 'true'
       shell: bash
       run: |
         dotnet build -c Release
 
     - name: Install Playwright
+      if: steps.check_to_proceed.outputs.proceed == 'true'
       shell: pwsh
       run: |
         $playwright = Get-ChildItem -File Microsoft.Playwright.dll -Path . -Recurse
@@ -44,6 +68,7 @@ jobs:
         & "$installer" install
 
     - name: Run Melon app - Melon Top 100
+      if: steps.check_to_proceed.outputs.proceed == 'true'
       shell: pwsh
       run: |
         $date = (Get-Date).ToUniversalTime().AddHours(9).ToString("yyyyMMdd")
@@ -57,6 +82,7 @@ jobs:
         popd
 
     - name: Run Spotify app - Melon Top 100
+      if: steps.check_to_proceed.outputs.proceed == 'true'
       shell: pwsh
       run: |
         $appsettings = Get-Content -Path ./samples/SpotifyPlaylist.ConsoleApp/appsettings.Development.sample.json | ConvertFrom-Json
@@ -75,6 +101,7 @@ jobs:
         popd
 
     - name: Run Spotify app - Billboard Hot 100
+      if: steps.check_to_proceed.outputs.proceed == 'true'
       shell: pwsh
       run: |
         $appsettings = Get-Content -Path ./samples/SpotifyPlaylist.ConsoleApp/appsettings.Development.sample.json | ConvertFrom-Json
@@ -93,6 +120,7 @@ jobs:
         popd
 
     - name: Upload data
+      if: steps.check_to_proceed.outputs.proceed == 'true'
       uses: stefanzweifel/git-auto-commit-action@v5
       with:
         commit_message: "Update data"
@@ -101,7 +129,22 @@ jobs:
         commit_user_email: "scraper+github-actions[bot]@users.noreply.github.com"
         commit_author: "GitHub Actions <scraper+github-actions[bot]@users.noreply.github.com>"
 
+    - name: Check missing tracks
+      id: missing_tracks
+      if: steps.check_to_proceed.outputs.proceed == 'true'
+      shell: pwsh
+      run: |
+        $date = (Get-Date).ToUniversalTime().AddHours(9).ToString("yyyyMMdd")
+        $collection = Get-Content "./data/spotify100-$date.json" | ConvertFrom-Json
+
+        $missingTracks = ($collection.missingTracks.Count -gt 0).ToString().ToLowerInvariant()
+
+        "exist=$missingTracks" >> $env:GITHUB_OUTPUT
+
     - name: Issue missing tracks
+      if: |
+        steps.check_to_proceed.outputs.proceed == 'true' &&
+        steps.missing_tracks.outputs.exist == 'true'
       shell: pwsh
       env:
         GH_TOKEN: ${{ github.token }}
@@ -109,7 +152,16 @@ jobs:
         $date = (Get-Date).ToUniversalTime().AddHours(9).ToString("yyyyMMdd")
         $collection = Get-Content "./data/spotify100-$date.json" | ConvertFrom-Json
 
-        if ($collection.missingTracks.Count -gt 0) {
-          $tracks = $collection.missingTracks | ConvertTo-Json -Depth 100
-          gh issue create --title "Missing tracks in Spotify playlist" --body "The following tracks are missing in the Spotify playlist:`r`n```````r`n$tracks`r`n```````r`n"
-        }
+        $tracks = $collection.missingTracks | ConvertTo-Json -Depth 100
+        gh issue create --title "Missing tracks in Spotify playlist" --body "The following tracks are missing in the Spotify playlist:`r`n```````jsonr`n$tracks`r`n```````r`n"
+
+    - name: Close sync request
+      if: |
+        steps.check_to_proceed.outputs.proceed == 'true' &&
+        steps.check_to_proceed.outputs.chartSyncRequest == 'true'
+      shell: pwsh
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        $issueNumber = ${{ github.event.issue.number }}
+        gh issue close $issueNumber -r completed -c "The chart has been synced up-to-date."
