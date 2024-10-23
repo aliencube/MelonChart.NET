@@ -85,3 +85,17 @@ This is the Melon chart scraping library written in .NET - Top 100, Hot 100, Dai
         return Results.Json(collection.Items);
     });
     ```
+
+## Samples
+
+There are some samples in the `samples` directory.
+
+### MelonChart on Spotify
+
+There's a [playlist on Spotify](https://open.spotify.com/playlist/6zRtKdszUiBnJm4lIbC6h9?si=kCR3OHPVTHmI3jHEY1Qyrg) using this library. If you want to sync the Melon chart to Spotify up-to-date, create an [issue](../../issues), and it will automatically update the playlist.
+
+![Melon Chart on Spotify](./assets/melon-chart-on-spotify.png)
+
+## Issues?
+
+If you find any issues, please [report them](../../issues).
