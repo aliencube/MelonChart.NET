@@ -1,5 +1,75 @@
 [
   {
+    "valence": 0.365,
+    "trackId": "4YaKlkNVJNbrIqN82EKFsQ",
+    "danceability": 0.538,
+    "trackUri": "spotify:track:4YaKlkNVJNbrIqN82EKFsQ",
+    "songId": "33043504"
+  },
+  {
+    "valence": 0.675,
+    "trackId": "45OflED18VsURGw2z0Y6Cv",
+    "danceability": 0.667,
+    "trackUri": "spotify:track:45OflED18VsURGw2z0Y6Cv",
+    "songId": "37497123"
+  },
+  {
+    "valence": 0.331,
+    "trackId": "5DIooJbJaNbxidKBMbk2ts",
+    "danceability": 0.556,
+    "trackUri": "spotify:track:5DIooJbJaNbxidKBMbk2ts",
+    "songId": "37064763"
+  },
+  {
+    "valence": 0.502,
+    "trackId": "74X2u8JMVooG2QbjRxXwR8",
+    "danceability": 0.697,
+    "trackUri": "spotify:track:74X2u8JMVooG2QbjRxXwR8",
+    "songId": "36910957"
+  },
+  {
+    "valence": 0.692,
+    "trackId": "4uOBL4DDWWVx4RhYKlPbPC",
+    "danceability": 0.815,
+    "trackUri": "spotify:track:4uOBL4DDWWVx4RhYKlPbPC",
+    "songId": "36430773"
+  },
+  {
+    "valence": 0.169,
+    "trackId": "7wLJ4xzxNss5abZ1kXs242",
+    "danceability": 0.602,
+    "trackUri": "spotify:track:7wLJ4xzxNss5abZ1kXs242",
+    "songId": "33855085"
+  },
+  {
+    "valence": 0.538,
+    "trackId": "0Q5VnK2DYzRyfqQRJuUtvi",
+    "danceability": 0.703,
+    "trackUri": "spotify:track:0Q5VnK2DYzRyfqQRJuUtvi",
+    "songId": "34847378"
+  },
+  {
+    "valence": 0.186,
+    "trackId": "33xRp6ZX1DKraRFHR9ZDck",
+    "danceability": 0.406,
+    "trackUri": "spotify:track:33xRp6ZX1DKraRFHR9ZDck",
+    "songId": "35553933"
+  },
+  {
+    "valence": 0.706,
+    "trackId": "1qosh64U6CR5ki1g1Rf2dZ",
+    "danceability": 0.914,
+    "trackUri": "spotify:track:1qosh64U6CR5ki1g1Rf2dZ",
+    "songId": "36713849"
+  },
+  {
+    "valence": 0.842,
+    "trackId": "1ULdASrNy5rurl1TZfFaMP",
+    "danceability": 0.757,
+    "trackUri": "spotify:track:1ULdASrNy5rurl1TZfFaMP",
+    "songId": "36416114"
+  },
+  {
     "valence": 0.939,
     "trackId": "5vNRhkKd0yEAg8suGBpjeY",
     "danceability": 0.777,
@@ -715,9 +785,9 @@
   },
   {
     "valence": 0.743,
-    "trackId": "5sdQOyqq2IDhvmx2lHOpwd",
+    "trackId": "5juCu4WFTFRZ2XilopAMTy",
     "danceability": 0.455,
-    "trackUri": "spotify:track:5sdQOyqq2IDhvmx2lHOpwd",
+    "trackUri": "spotify:track:5juCu4WFTFRZ2XilopAMTy",
     "songId": "37194943"
   }
 ]

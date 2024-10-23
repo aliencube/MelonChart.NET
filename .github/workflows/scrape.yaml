@@ -11,6 +11,7 @@ jobs:
 
     permissions:
       contents: write
+      issues: write
 
     steps:
     - name: Checkout code
@@ -102,6 +103,8 @@ jobs:
 
     - name: Issue missing tracks
       shell: pwsh
+      env:
+        GH_TOKEN: ${{ github.token }}
       run: |
         $date = (Get-Date).ToUniversalTime().AddHours(9).ToString("yyyyMMdd")
         $collection = Get-Content "./data/spotify100-$date.json" | ConvertFrom-Json
