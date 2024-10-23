@@ -92,7 +92,7 @@ There are some samples in the `samples` directory.
 
 ### MelonChart on Spotify
 
-There's a [playlist on Spotify](https://open.spotify.com/playlist/6zRtKdszUiBnJm4lIbC6h9?si=kCR3OHPVTHmI3jHEY1Qyrg) using this library. If you want to sync the Melon chart to Spotify up-to-date, create an [issue](../../issues), and it will automatically update the playlist.
+There's a [playlist on Spotify](https://open.spotify.com/playlist/6zRtKdszUiBnJm4lIbC6h9?si=kCR3OHPVTHmI3jHEY1Qyrg) using this library. If you want to sync the Melon chart to Spotify up-to-date, create a [sync request](../../issues/new?assignees=&labels=sync-request&projects=&template=01_SYNC_CHART.yml&title=%5BSync%5D%3A+Request+for+chart+sync), and it will automatically update the playlist.
 
 ![Melon Chart on Spotify](./assets/melon-chart-on-spotify.png)
 
