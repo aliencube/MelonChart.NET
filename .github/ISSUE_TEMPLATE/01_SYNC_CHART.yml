@@ -1,0 +1,23 @@
+name: Request for chart sync
+description: Use this template to request a chart sync up-to-date.
+title: "[Sync]: Request for chart sync"
+labels: ["sync-request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for requesting a chart sync! When you find the chart is out-of-date, please submit this issue, and it will automatically republish the chart up-to-date.
+  - type: dropdown
+    id: issue-type
+    attributes:
+      label: Issue Type
+      description: What type of issue are you creating?
+      options:
+        - Sync Request
+      default: 0
+    validations:
+      required: true
+  - type: markdown
+    attributes:
+      value: |
+        When you're ready, click the submit button below, and it will automatically republish the chart up-to-date.
