@@ -153,7 +153,10 @@ jobs:
         $collection = Get-Content "./data/spotify100-$date.json" | ConvertFrom-Json
 
         $tracks = $collection.missingTracks | ConvertTo-Json -Depth 100
-        gh issue create --title "Missing tracks in Spotify playlist" --body "The following tracks are missing in the Spotify playlist:`r`n```````jsonr`n$tracks`r`n```````r`n"
+        gh issue create `
+          --title "Missing tracks in Spotify playlist" `
+          --body "The following tracks are missing in the Spotify playlist:`r`n```````jsonr`n$tracks`r`n```````r`n" `
+          --label missing-tracks
 
     - name: Close sync request
       if: |
@@ -164,4 +167,6 @@ jobs:
         GH_TOKEN: ${{ github.token }}
       run: |
         $issueNumber = ${{ github.event.issue.number }}
-        gh issue close $issueNumber -r completed -c "The chart has been synced up-to-date."
+        gh issue close $issueNumber `
+          --reason completed `
+          --comment "The chart has been synced up-to-date."
