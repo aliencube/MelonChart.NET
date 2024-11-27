@@ -114,7 +114,7 @@ public class MelonChartHelper(SpotifySettings settings, JsonSerializerOptions js
         var images = await this.Spotify!.Playlists.GetCovers(playlistId).ConfigureAwait(false);
         if (images.Count != 1)
         {
-            var bytes = await File.ReadAllBytesAsync(Path.Combine(ProjectPathInfo.ProjectPath, "../../assets/MelonChart.NET.png")).ConfigureAwait(false);
+            var bytes = await File.ReadAllBytesAsync(Path.Combine(ProjectPathInfo.ProjectPath, "../../assets/MelonChart.Spotify.png")).ConfigureAwait(false);
             var cover = Convert.ToBase64String(bytes);
             await this.Spotify!.Playlists.UploadCover(playlistId, cover).ConfigureAwait(false);
         }
