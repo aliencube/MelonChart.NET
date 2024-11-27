@@ -100,24 +100,24 @@ jobs:
         $result[$($result.indexOf("{"))..$($result.Length-1)] | Out-File -FilePath "spotify100-$date.json" -Force
         popd
 
-    - name: Run Spotify app - Billboard Hot 100
-      if: steps.check_to_proceed.outputs.proceed == 'true'
-      shell: pwsh
-      run: |
-        $appsettings = Get-Content -Path ./samples/SpotifyPlaylist.ConsoleApp/appsettings.Development.sample.json | ConvertFrom-Json
-        $appsettings.Azure.APIM.BaseUrl = "${{ secrets.APIM_BASE_URL }}"
-        $appsettings.Azure.APIM.SubscriptionKey = "${{ secrets.APIM_SUBSCRIPTION_KEY }}"
-        $appsettings | ConvertTo-Json -Depth 100 | Out-File -FilePath ./samples/SpotifyPlaylist.ConsoleApp/appsettings.Development.json -Force
+    # - name: Run Spotify app - Billboard Hot 100
+    #   if: steps.check_to_proceed.outputs.proceed == 'true'
+    #   shell: pwsh
+    #   run: |
+    #     $appsettings = Get-Content -Path ./samples/SpotifyPlaylist.ConsoleApp/appsettings.Development.sample.json | ConvertFrom-Json
+    #     $appsettings.Azure.APIM.BaseUrl = "${{ secrets.APIM_BASE_URL }}"
+    #     $appsettings.Azure.APIM.SubscriptionKey = "${{ secrets.APIM_SUBSCRIPTION_KEY }}"
+    #     $appsettings | ConvertTo-Json -Depth 100 | Out-File -FilePath ./samples/SpotifyPlaylist.ConsoleApp/appsettings.Development.json -Force
 
-        $date = (Get-Date).ToUniversalTime().AddHours(9).ToString("yyyyMMdd")
-        # $result = dotnet run --project ./samples/SpotifyPlaylist.ConsoleApp/ -- -t spotify -s ${{ secrets.SPOTIFY_BILLBOARD_HOT100_PLAYLIST_ID }} --json | ConvertFrom-Json
-        $result = dotnet run --project ./samples/SpotifyPlaylist.ConsoleApp/ -- -t spotify -s ${{ secrets.SPOTIFY_BILLBOARD_HOT100_PLAYLIST_ID }} --json
+    #     $date = (Get-Date).ToUniversalTime().AddHours(9).ToString("yyyyMMdd")
+    #     # $result = dotnet run --project ./samples/SpotifyPlaylist.ConsoleApp/ -- -t spotify -s ${{ secrets.SPOTIFY_BILLBOARD_HOT100_PLAYLIST_ID }} --json | ConvertFrom-Json
+    #     $result = dotnet run --project ./samples/SpotifyPlaylist.ConsoleApp/ -- -t spotify -s ${{ secrets.SPOTIFY_BILLBOARD_HOT100_PLAYLIST_ID }} --json
 
-        mkdir -p ./data
-        pushd ./data
-        # $result[$($result.indexOf("{"))..$($result.Length-1)] | ConvertTo-Json -Depth 100 | Out-File -FilePath "billboard100-$date.json" -Force
-        $result[$($result.indexOf("{"))..$($result.Length-1)] | Out-File -FilePath "billboard100-$date.json" -Force
-        popd
+    #     mkdir -p ./data
+    #     pushd ./data
+    #     # $result[$($result.indexOf("{"))..$($result.Length-1)] | ConvertTo-Json -Depth 100 | Out-File -FilePath "billboard100-$date.json" -Force
+    #     $result[$($result.indexOf("{"))..$($result.Length-1)] | Out-File -FilePath "billboard100-$date.json" -Force
+    #     popd
 
     - name: Upload data
       if: steps.check_to_proceed.outputs.proceed == 'true'
