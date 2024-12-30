@@ -2,8 +2,8 @@ name: Daily Scrape
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "30 20 * * *"
+  # schedule:
+  #   - cron: "30 20 * * *"
   issues:
     types:
       - opened
